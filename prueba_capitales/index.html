@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <title>Capitales</title>
+    <script>
+        window.onload = () => {
+            document.getElementById("send").onclick = () => {
+                document.getElementsByTagName("ul")[0].innerHTML = "";
+
+                fetch('http://thedaviddelta.tk/pruebas_backend/capitales.php', {
+                    "method": "POST",
+                    "headers": {
+                        "Content-Type": "application/x-www-form-urlencoded"
+                    },
+                    "body": "sort=" + document.getElementById("sort").value
+                }).then((resp) => resp.json()
+                ).then((data) => {
+                    data.forEach(e => {
+                        document.getElementsByTagName("ul")[0].innerHTML += `
+                            <li>${e}</li>
+                        `;
+                    });
+                });
+            }
+            
+            () => {
+                let xhr = new XMLHttpRequest();
+                xhr.open("POST", "http://thedaviddelta.tk/pruebas_backend/capitales.php", true);
+                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                xhr.onreadystatechange = () => {
+                    if (xhr.readyState === 4 && xhr.status === 200) {
+                        let json = JSON.parse(xhr.responseText);
+
+                        document.getElementsByTagName("ul")[0].innerHTML = "";
+                        /*
+                        for (const key in json) {
+                            document.getElementsByTagName("ul")[0].innerHTML += `
+                                <li>${json[key]}</li>
+                            `;
+                        }
+                        */
+                        json.forEach(e => {
+                            document.getElementsByTagName("ul")[0].innerHTML += `
+                                <li>${e}</li>
+                            `;
+                        });
+                    }
+                };
+                let data = "sort=" + document.getElementById("sort").value;
+                xhr.send(data);
+            }
+        }
+    </script>
+</head>
+<body>
+    <input type="text" name="sort" id="sort">
+    <input type="button" value="Enviar" id="send">
+    <ul></ul>
+</body>
+</html>

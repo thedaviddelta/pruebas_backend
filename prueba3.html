@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <title>Document</title>
+    <script>
+        window.onload = () => {
+            document.getElementById("form").onsubmit = () => {
+                let p = document.createElement("p");
+                p.innerHTML = "Hola " + document.getElementsByName("name")[0].value + " de " + document.getElementsByName("age")[0].value + " años!";
+                document.body.appendChild(p);
+                return false;
+            }
+        }
+    </script>
+</head>
+<body>
+    <form id="form" method="POST">
+        <p>Nombre: <input type="text" name="name"></p>
+        <p>Edad: <input type="text" name="age"></p>
+        <p><input type="submit"></p>
+    </form>
+</body>
+</html>

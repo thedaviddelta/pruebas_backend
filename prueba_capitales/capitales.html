@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <title>Capitales de Europa</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
+    <script>
+        window.onload = () => {
+            const sort = document.getElementById("sort");
+            const resultados = document.getElementById("resultados");
+
+            sort.oninput = () => {
+                if (sort.value === "") {
+                    resultados.innerHTML = "";
+                    return;
+                }
+
+                fetch('http://thedaviddelta.tk/pruebas_backend/capitales.php', {
+                    "method": "POST",
+                    "headers": {
+                        "Content-Type": "application/x-www-form-urlencoded"
+                    },
+                    "body": "sort=" + sort.value
+                }).then((resp) => resp.json()
+                ).then((data) => {
+                    let output = data.map(c => `
+                        <div class="card card-body mb-1">
+                            <h4>${c}</h4>
+                        </div>
+                    `).join("");
+
+                    resultados.innerHTML = output;
+                })
+            }
+
+            // Deprecated
+
+            (data) => {
+                let xhr = new XMLHttpRequest();
+                xhr.open("POST", "http://thedaviddelta.tk/pruebas_backend/capitales.php", false);
+                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+                xhr.send(data);
+                if (xhr.status === 200) 
+                    return xhr.responseText;
+            }
+
+            async () => {
+                if (sort.value === "") {
+                    resultados.innerHTML = "";
+                    return;
+                }
+
+                let json = JSON.parse(await search("sort=" + sort.value));
+                console.log(json);
+
+                let output = json.map(c => `
+                    <div class="card card-body mb-1">
+                        <h4>${c}</h4>
+                    </div>
+                `).join("");
+
+                resultados.innerHTML = output;
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="row m-auto">
+            <div class="col-md-6 m-auto">
+                <h3 class="text-center mt-3 mb-4">
+                    <i class="fas fa-flag"></i> Capitales de Europa
+                </h3>
+                <div class="form-group">
+                    <input type="text" id="sort" class="form-control form-control-lg" placeholder="Introduce el nombre de una capital...">
+                </div>
+                <div id="resultados"></div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
